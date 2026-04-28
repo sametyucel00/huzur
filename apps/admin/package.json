@@ -12,7 +12,6 @@
   "dependencies": {
     "@alloc/quick-lru": "^5.2.0",
     "@next/env": "15.5.15",
-    "@next/swc-win32-x64-msvc": "15.5.15",
     "@sukut/shared": "file:../../packages/shared",
     "cssesc": "^3.0.0",
     "dlv": "^1.1.3",
