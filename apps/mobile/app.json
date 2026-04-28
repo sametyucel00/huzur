@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "Sükût",
+    "slug": "sukut",
+    "scheme": "sukut",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.sukut.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.sukut.app",
+      "permissions": [
+        "POST_NOTIFICATIONS"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#101C34"
+      }
+    },
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#101C34"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/notification-icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#D8A84E"
+        }
+      ],
+      "expo-iap"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "appDisplayName": "Sükût",
+      "bundleIdPlaceholder": "com.sukut.app",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7b8883d9-2177-4342-afef-fecd6958fbf3"
+      }
+    },
+    "owner": "smtycl"
+  }
+}
