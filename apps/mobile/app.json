@@ -41,8 +41,7 @@
           "icon": "./assets/notification-icon.png",
           "color": "#D8A84E"
         }
-      ],
-      "expo-iap"
+      ]
     ],
     "experiments": {
       "typedRoutes": true

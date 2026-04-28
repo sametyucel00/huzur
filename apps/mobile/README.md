@@ -47,9 +47,9 @@ Android/iOS/web build otomatik alınmaz. Expo web uyumu mobil test amacıyla kor
 
 - Satın alma katmanı `src/services/purchases` altında soyut provider mimarisiyle hazırdır.
 - Varsayılan sağlayıcı `EXPO_PUBLIC_PURCHASE_PROVIDER=mock` olarak çalışır.
-- Canlı mağaza satın alması için `EXPO_PUBLIC_PURCHASE_PROVIDER=store` seçilir.
-- `store` sağlayıcısı iOS'ta Apple StoreKit, Android'de Google Play Billing kullanır.
-- Ürün id alanları `.env.example` içinde `EXPO_PUBLIC_SUKUT_PRIVILEGE_MONTHLY_PRODUCT_ID` ve `EXPO_PUBLIC_SUKUT_PRIVILEGE_YEARLY_PRODUCT_ID` olarak tanımlıdır.
+- `store` sağlayıcısı ürün kimliklerini ve teklif kartlarını hazır tutar, ancak native IAP modülü Android build uyumluluğu nedeniyle şu anda devre dışıdır.
+- Ürün id alanları `EXPO_PUBLIC_SUKUT_PRIVILEGE_MONTHLY_PRODUCT_ID` ve `EXPO_PUBLIC_SUKUT_PRIVILEGE_YEARLY_PRODUCT_ID` olarak tanımlıdır.
+- Canlı Apple/Google satın alma açılmadan önce Expo SDK ile uyumlu bir native IAP modülü seçilip tekrar etkinleştirilmelidir.
 - Direkt mağaza satın alımı Expo Go ve web üzerinde çalışmaz; doğrulama için development/preview build ve sandbox/test kullanıcıları gerekir.
 - Premium durum `src/stores/subscriptionStore.ts` içinde lokal saklanır; mobil kullanıcı ibadet verisi Firebase'e gönderilmez.
 - Development modda Ayarlar ekranında mock Ayrıcalık aç/kapat kontrolü görünür; production modda gösterilmez.
