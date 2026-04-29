@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
 import * as Location from "expo-location";
+import { Magnetometer } from "expo-sensors";
+import { useEffect, useMemo, useState } from "react";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { findSupportedPrayerCity, TURKEY_PRAYER_CITIES } from "@sukut/shared";
 import { AppHeader } from "@/components/AppHeader";
 import { AppScreen } from "@/components/AppScreen";
@@ -13,19 +14,69 @@ import { useLocalProfileStore } from "@/stores/localProfileStore";
 import { useAppTheme } from "@/theme/useAppTheme";
 import { confirmAction, showInfo } from "@/utils/dialog";
 
+function normalizeDegree(value: number) {
+  return ((value % 360) + 360) % 360;
+}
+
+function headingFromMagnetometer(data: { x: number; y: number }) {
+  const angle = Math.atan2(data.y, data.x) * (180 / Math.PI);
+  return normalizeDegree(angle);
+}
+
 export function QiblaScreen() {
   const theme = useAppTheme();
   const [cityPickerVisible, setCityPickerVisible] = useState(false);
   const [gpsBearing, setGpsBearing] = useState<number | null>(null);
   const [locationLabel, setLocationLabel] = useState<string | null>(null);
+  const [heading, setHeading] = useState<number | null>(null);
+  const [sensorAvailable, setSensorAvailable] = useState(Platform.OS !== "web");
   const city = useLocalProfileStore((state) => state.profile?.city ?? "İstanbul");
   const setCity = useLocalProfileStore((state) => state.setCity);
   const cityMeta = findSupportedPrayerCity(city);
   const activeBearing = Math.round(gpsBearing ?? calculateQiblaBearing(cityMeta));
+  const arrowRotation = useMemo(() => {
+    if (heading === null) {
+      return activeBearing;
+    }
+
+    return normalizeDegree(activeBearing - heading);
+  }, [activeBearing, heading]);
+
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      setSensorAvailable(false);
+      return undefined;
+    }
+
+    let mounted = true;
+    let subscription: { remove: () => void } | null = null;
+
+    Magnetometer.isAvailableAsync()
+      .then((available) => {
+        if (!mounted) return;
+        setSensorAvailable(available);
+        if (!available) return;
+
+        Magnetometer.setUpdateInterval(250);
+        subscription = Magnetometer.addListener((data) => {
+          setHeading(headingFromMagnetometer(data));
+        });
+      })
+      .catch(() => {
+        if (mounted) {
+          setSensorAvailable(false);
+        }
+      });
+
+    return () => {
+      mounted = false;
+      subscription?.remove();
+    };
+  }, []);
 
   const requestLocation = () => {
     if (Platform.OS === "web") {
-      showInfo("Konum izni", "Web önizlemede şehir bilgisine göre yaklaşık yön gösteriliyor. Konum izni mobil uygulamada istenir.");
+      showInfo("Konum izni", "Web önizlemede şehir bilgisine göre yaklaşık yön gösteriliyor. Konum ve pusula mobil uygulamada çalışır.");
       return;
     }
 
@@ -57,17 +108,27 @@ export function QiblaScreen() {
     });
   };
 
+  const sensorText =
+    Platform.OS === "web"
+      ? "Canlı pusula mobil cihazda çalışır."
+      : sensorAvailable
+        ? heading === null
+          ? "Telefonu düz tut; pusula sensörü bekleniyor."
+          : `Telefon yönü: ${Math.round(heading)}°`
+        : "Bu cihazda pusula sensörü kullanılamıyor.";
+
   return (
     <AppScreen>
       <AppHeader title="Kıble yönü" subtitle="Konum izni olmadan şehir bilgisiyle yaklaşık yön gösterilir." />
       <View style={[styles.compass, theme.shadows.deep, { backgroundColor: theme.colors.primarySoft }]}>
         <View style={[styles.ring, { borderColor: theme.colors.calm }]}>
-          <Ionicons name="navigate" size={72} color={theme.colors.accent} style={{ transform: [{ rotate: `${activeBearing}deg` }] }} />
+          <Ionicons name="navigate" size={72} color={theme.colors.accent} style={{ transform: [{ rotate: `${arrowRotation}deg` }] }} />
         </View>
         <Text style={[styles.degree, { color: "#F8F5EE" }]}>{activeBearing}°</Text>
         <Text style={[theme.typography.caption, styles.locationText, { color: "#DCC9A6" }]}>
           {locationLabel ?? `${city} için yaklaşık yön`}
         </Text>
+        <Text style={[theme.typography.caption, styles.locationText, { color: "#BEB3A6" }]}>{sensorText}</Text>
       </View>
       <PrimaryButton label="Konumla daha doğru hesapla" onPress={requestLocation} />
       <SecondaryButton label="Manuel şehir seç" onPress={() => setCityPickerVisible(true)} />
@@ -123,7 +184,7 @@ const styles = StyleSheet.create({
     fontWeight: "800"
   },
   locationText: {
-    maxWidth: 250,
+    maxWidth: 270,
     textAlign: "center"
   }
 });

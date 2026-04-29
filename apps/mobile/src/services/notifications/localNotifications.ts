@@ -106,6 +106,7 @@ export async function scheduleEnabledLocalReminders(params: {
   const scheduledIds: string[] = [];
   const dailyTemplate = params.templates.find((template) => template.type === "daily" && template.isActive);
   const eventTemplate = params.templates.find((template) => template.type === "event" && template.isActive);
+  const streakTemplate = params.templates.find((template) => template.type === "streak" && template.isActive);
 
   if (params.profile.notificationPreferences.dailyContent && dailyTemplate) {
     const id = await scheduleGentleDailyReminder({
@@ -127,5 +128,35 @@ export async function scheduleEnabledLocalReminders(params: {
     if (id) scheduledIds.push(id);
   }
 
+  if (params.profile.notificationPreferences.streakReminder && streakTemplate) {
+    const id = await scheduleGentleDailyReminder({
+      title: streakTemplate.title,
+      body: streakTemplate.body,
+      hour: 20,
+      minute: 30
+    });
+    if (id) scheduledIds.push(id);
+  }
+
   return scheduledIds;
+}
+
+export async function cancelAllLocalReminders(): Promise<void> {
+  if (Platform.OS === "web") {
+    return;
+  }
+
+  await Notifications.cancelAllScheduledNotificationsAsync().catch(() => undefined);
+}
+
+export async function syncEnabledLocalReminders(params: {
+  profile: LocalUserProfile;
+  templates: NotificationTemplate[];
+}): Promise<string[]> {
+  if (Platform.OS === "web") {
+    return [];
+  }
+
+  await cancelAllLocalReminders();
+  return scheduleEnabledLocalReminders(params);
 }

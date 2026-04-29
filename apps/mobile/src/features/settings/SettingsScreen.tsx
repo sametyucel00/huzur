@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
-import { tr, type NotificationPreferences, type ThemeMode } from "@sukut/shared";
+import { tr, type LocalUserProfile, type NotificationPreferences, type ThemeMode } from "@sukut/shared";
 import { AppHeader } from "@/components/AppHeader";
 import { AppScreen } from "@/components/AppScreen";
 import { CityPickerModal } from "@/components/CityPickerModal";
 import { ContentCard } from "@/components/ContentCard";
 import { SecondaryButton } from "@/components/SecondaryButton";
 import { ToggleRow } from "@/components/ToggleRow";
-import { requestLocalNotificationPermission } from "@/services/notifications/localNotifications";
+import { requestLocalNotificationPermission, syncEnabledLocalReminders } from "@/services/notifications/localNotifications";
 import { resetLocalUserData } from "@/storage/resetLocalUserData";
+import { useContentStore } from "@/stores/contentStore";
 import { useLocalProfileStore } from "@/stores/localProfileStore";
 import { useLocalProgressStore } from "@/stores/localProgressStore";
 import { useSubscriptionStore } from "@/stores/subscriptionStore";
@@ -40,9 +41,16 @@ export function SettingsScreen() {
   const toggleNotificationPreference = useLocalProfileStore((state) => state.toggleNotificationPreference);
   const hydrateProfile = useLocalProfileStore((state) => state.hydrate);
   const hydrateProgress = useLocalProgressStore((state) => state.hydrate);
+  const notificationTemplates = useContentStore((state) => state.bundle.notificationTemplates);
   const isPremium = useSubscriptionStore((state) => state.isPremium);
   const setMockPremiumForDevelopment = useSubscriptionStore((state) => state.setMockPremiumForDevelopment);
   const showDevPremiumToggle = process.env.NODE_ENV !== "production";
+
+  const syncNotifications = (nextProfile: LocalUserProfile) => {
+    syncEnabledLocalReminders({ profile: nextProfile, templates: notificationTemplates }).catch(() =>
+      showInfo("Bildirimler güncellenemedi", "Bildirim tercihlerin kaydedildi, ancak hatırlatmalar şu anda yenilenemedi.")
+    );
+  };
 
   const cycleTheme = () => {
     const currentTheme = profile?.theme ?? "system";
@@ -63,6 +71,9 @@ export function SettingsScreen() {
       onConfirm: () => {
         requestLocalNotificationPermission()
           .then((result) => {
+            if (result.granted && profile) {
+              syncNotifications(profile);
+            }
             showInfo("Bildirim izni", result.granted ? "Bildirim izni verildi." : "Bildirim izni verilmedi.");
           })
           .catch(() => showInfo("Bildirim izni", "Bildirim izni alınamadı."));
@@ -73,13 +84,17 @@ export function SettingsScreen() {
   const confirmReset = () => {
     confirmAction({
       title: "Veriler sıfırlansın mı?",
-      message: "Favoriler, hedefler, zikir sayacı, rozet ilerlemesi ve lokal profil bilgisi bu cihazdan silinir. İndirilen içerik cache'i korunur.",
+      message:
+        "Favoriler, hedefler, zikir sayacı, Kur'an okuma ilerlemesi, rozet ilerlemesi ve lokal profil bilgisi bu cihazdan silinir. İndirilen içerik cache'i korunur.",
       confirmText: "Sıfırla",
       destructive: true,
       onConfirm: () => {
         resetLocalUserData()
           .then(() => Promise.all([hydrateProfile(), hydrateProgress()]))
-          .then(() => showInfo("Veriler sıfırlandı", "Cihazdaki kişisel ilerleme verileri temizlendi."))
+          .then(() => {
+            showInfo("Veriler sıfırlandı", "Cihazdaki kişisel ilerleme verileri temizlendi. Başlangıç ekranı tekrar açılacak.");
+            router.replace("/onboarding");
+          })
           .catch(() => showInfo("Sıfırlama tamamlanamadı", "Lütfen tekrar dene."));
       }
     });
@@ -119,9 +134,9 @@ export function SettingsScreen() {
             title={notificationLabels[key]}
             value={Boolean(profile?.notificationPreferences[key])}
             onToggle={() =>
-              toggleNotificationPreference(key).catch(() =>
-                showInfo("Bildirim tercihi kaydedilemedi", "Tercih cihazına yazılamadı. Lütfen tekrar dene.")
-              )
+              toggleNotificationPreference(key)
+                .then(syncNotifications)
+                .catch(() => showInfo("Bildirim tercihi kaydedilemedi", "Tercih cihazına yazılamadı. Lütfen tekrar dene."))
             }
           />
         ))}

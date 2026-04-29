@@ -1,17 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ImageBackground, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { AppScreen } from "@/components/AppScreen";
-import { BadgePill } from "@/components/BadgePill";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { SecondaryButton } from "@/components/SecondaryButton";
 import { requestLocalNotificationPermission } from "@/services/notifications/localNotifications";
+import { STORAGE_KEYS } from "@/storage/keys";
 import { useAppTheme } from "@/theme/useAppTheme";
 import { showInfo } from "@/utils/dialog";
-
-const splashImage = require("../../../assets/splash.png");
-const ONBOARDING_SEEN_KEY = "sukut:onboardingSeen";
 
 const steps = [
   "Günlük dua, zikir ve Kur'an okuma ritmini sade bir alanda topla.",
@@ -24,7 +21,7 @@ export function OnboardingScreen() {
   const theme = useAppTheme();
 
   const finish = async () => {
-    await AsyncStorage.setItem(ONBOARDING_SEEN_KEY, "true").catch(() => undefined);
+    await AsyncStorage.setItem(STORAGE_KEYS.onboardingSeen, "true").catch(() => undefined);
     router.replace("/");
   };
 
@@ -50,14 +47,11 @@ export function OnboardingScreen() {
 
   return (
     <AppScreen>
-      <ImageBackground source={splashImage} resizeMode="cover" style={styles.hero} imageStyle={styles.heroImage}>
-        <View style={styles.overlay} />
-        <View style={styles.heroContent}>
-          <BadgePill label="Sükût" tone="accent" />
-          <Text style={styles.title}>Sükûta yolculuk, huzura varış</Text>
-          <Text style={styles.subtitle}>Az, düzenli ve içten bir manevi alışkanlık alanı.</Text>
-        </View>
-      </ImageBackground>
+      <View style={[styles.hero, { backgroundColor: theme.colors.primarySoft, borderColor: theme.colors.border }]}>
+        <Text style={[styles.kicker, { color: theme.colors.accent }]}>SÜKÛT</Text>
+        <Text style={styles.title}>Sükûta yolculuk, huzura varış</Text>
+        <Text style={styles.subtitle}>Az, düzenli ve içten bir manevi alışkanlık alanı.</Text>
+      </View>
 
       <View style={styles.steps}>
         {steps.map((item, index) => (
@@ -69,53 +63,47 @@ export function OnboardingScreen() {
       </View>
 
       <View style={styles.permissionRow}>
-        <SecondaryButton label="Konum izni" onPress={requestLocation} />
-        <SecondaryButton label="Bildirim izni" onPress={requestNotifications} />
+        <SecondaryButton label="Konum izni" onPress={requestLocation} style={styles.permissionButton} />
+        <SecondaryButton label="Bildirim izni" onPress={requestNotifications} style={styles.permissionButton} />
       </View>
 
       <PrimaryButton label="Başla" onPress={finish} />
-      <View style={styles.secondaryActions}>
-        <Pressable accessibilityRole="button" onPress={() => router.push("/privacy")} style={styles.textAction}>
-          <Text style={[styles.textActionLabel, { color: theme.colors.textMuted }]}>Gizlilik</Text>
-        </Pressable>
-        <SecondaryButton label="Kaynaklar" onPress={() => router.push("/sources")} />
-      </View>
     </AppScreen>
   );
 }
 
 const styles = StyleSheet.create({
   hero: {
+    alignSelf: "stretch",
     borderRadius: 30,
-    justifyContent: "flex-end",
-    minHeight: 360,
-    overflow: "hidden"
-  },
-  heroImage: {
-    borderRadius: 30
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(7, 17, 30, 0.12)"
-  },
-  heroContent: {
+    borderWidth: 1,
     gap: 12,
-    padding: 22
+    minHeight: 250,
+    justifyContent: "flex-end",
+    padding: 24,
+    width: "100%"
+  },
+  kicker: {
+    fontSize: 12,
+    fontWeight: "900",
+    letterSpacing: 0
   },
   title: {
     color: "#FFF8ED",
-    fontSize: 30,
+    fontSize: 34,
     fontWeight: "900",
-    lineHeight: 36
+    lineHeight: 40
   },
   subtitle: {
     color: "#EDE4D7",
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "700",
-    lineHeight: 22
+    lineHeight: 23
   },
   steps: {
-    gap: 10
+    alignSelf: "stretch",
+    gap: 10,
+    width: "100%"
   },
   step: {
     alignItems: "center",
@@ -136,23 +124,13 @@ const styles = StyleSheet.create({
     minWidth: 0
   },
   permissionRow: {
+    alignSelf: "stretch",
     flexDirection: "row",
     gap: 10,
-    justifyContent: "center"
-  },
-  secondaryActions: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 12,
-    justifyContent: "center"
-  },
-  textAction: {
-    minHeight: 44,
     justifyContent: "center",
-    paddingHorizontal: 12
+    width: "100%"
   },
-  textActionLabel: {
-    fontSize: 14,
-    fontWeight: "900"
+  permissionButton: {
+    flex: 1
   }
 });

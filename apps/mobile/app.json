@@ -44,6 +44,19 @@
       "expo-router",
       "expo-sqlite",
       [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#101C34",
+          "dark": {
+            "image": "./assets/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#101C34"
+          }
+        }
+      ],
+      [
         "expo-location",
         {
           "locationWhenInUsePermission": "Sükût, kıble yönünü ve yakın şehir bilgisini daha doğru hesaplamak için konumunu yalnızca uygulamayı kullanırken ister."

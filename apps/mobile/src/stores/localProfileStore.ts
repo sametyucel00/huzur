@@ -8,7 +8,7 @@ interface LocalProfileState {
   hydrate: () => Promise<void>;
   setCity: (city: string) => Promise<void>;
   setTheme: (theme: ThemeMode) => Promise<void>;
-  toggleNotificationPreference: (key: keyof NotificationPreferences) => Promise<void>;
+  toggleNotificationPreference: (key: keyof NotificationPreferences) => Promise<LocalUserProfile>;
 }
 
 export const useLocalProfileStore = create<LocalProfileState>((set, get) => ({
@@ -47,5 +47,6 @@ export const useLocalProfileStore = create<LocalProfileState>((set, get) => ({
     };
     await writeLocalProfile(next);
     set({ profile: next });
+    return next;
   }
 }));

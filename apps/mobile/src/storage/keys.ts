@@ -9,5 +9,6 @@ export const STORAGE_KEYS = {
   quranProgress: "sukut.quran.progress",
   localUserId: "sukut.local.userId",
   deviceId: "sukut.device.id",
-  syncState: "sukut.sync.state"
+  syncState: "sukut.sync.state",
+  onboardingSeen: "sukut:onboardingSeen"
 } as const;

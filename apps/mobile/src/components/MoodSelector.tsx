@@ -4,15 +4,17 @@ import { useAppTheme } from "@/theme/useAppTheme";
 
 interface MoodSelectorProps {
   selectedMood?: MoodKey;
+  maxItems?: number;
   onSelect?: (mood: MoodKey) => void;
 }
 
-export function MoodSelector({ selectedMood, onSelect }: MoodSelectorProps) {
+export function MoodSelector({ selectedMood, maxItems, onSelect }: MoodSelectorProps) {
   const theme = useAppTheme();
+  const moods = MOOD_KEYS.filter((mood) => mood !== "focused").slice(0, maxItems);
 
   return (
     <View style={styles.grid}>
-      {MOOD_KEYS.filter((mood) => mood !== "focused").map((mood) => {
+      {moods.map((mood) => {
         const selected = selectedMood === mood;
 
         return (
@@ -46,15 +48,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 12,
-    justifyContent: "space-between"
+    justifyContent: "center"
   },
   card: {
     borderRadius: 22,
     borderWidth: 1,
+    flexBasis: "47%",
+    flexGrow: 1,
     gap: 12,
+    maxWidth: "48%",
     minHeight: 86,
+    minWidth: 0,
     padding: 14,
-    width: "48%"
+    width: "47%"
   },
   rule: {
     borderRadius: 999,

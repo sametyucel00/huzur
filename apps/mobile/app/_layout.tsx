@@ -8,10 +8,14 @@ import { initializeLocalNotifications } from "@/services/notifications/localNoti
 import { useLocalProfileStore } from "@/stores/localProfileStore";
 import { useLocalProgressStore } from "@/stores/localProgressStore";
 import { useSubscriptionStore } from "@/stores/subscriptionStore";
+import { STORAGE_KEYS } from "@/storage/keys";
 import { useAppTheme } from "@/theme/useAppTheme";
+import { AppDialogHost } from "@/utils/dialog";
+import * as SplashScreen from "expo-splash-screen";
 
 const splashImage = require("../assets/splash.png");
-const ONBOARDING_SEEN_KEY = "sukut:onboardingSeen";
+
+SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 const scalableText = Text as unknown as { defaultProps?: Record<string, unknown> };
 const scalableTextInput = TextInput as unknown as { defaultProps?: Record<string, unknown> };
@@ -53,7 +57,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 2600);
-    AsyncStorage.getItem(ONBOARDING_SEEN_KEY)
+    SplashScreen.hideAsync().catch(() => undefined);
+    AsyncStorage.getItem(STORAGE_KEYS.onboardingSeen)
       .then((value) => setOnboardingSeen(value === "true"))
       .catch(() => setOnboardingSeen(false));
     return () => clearTimeout(timer);
@@ -66,7 +71,7 @@ export default function RootLayout() {
 
     const currentRoute = segments.join("/");
     if (!onboardingSeen && !currentRoute.includes("onboarding")) {
-      AsyncStorage.getItem(ONBOARDING_SEEN_KEY)
+      AsyncStorage.getItem(STORAGE_KEYS.onboardingSeen)
         .then((value) => {
           if (value === "true") {
             setOnboardingSeen(true);
@@ -83,6 +88,7 @@ export default function RootLayout() {
     <>
       <StatusBar style={theme.mode === "dark" ? "light" : "dark"} />
       <Stack screenOptions={{ animation: "fade", animationDuration: 120, headerShown: false }} />
+      <AppDialogHost />
       {showSplash ? (
         <ImageBackground source={splashImage} resizeMode="cover" style={styles.splash}>
           <View style={styles.splashShade} />
