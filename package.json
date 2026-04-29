@@ -10,6 +10,7 @@
   "scripts": {
     "mobile": "npm --workspace apps/mobile run start",
     "admin": "npm --workspace apps/admin run dev",
+    "postinstall": "node scripts/patch-expo-iap.js",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
