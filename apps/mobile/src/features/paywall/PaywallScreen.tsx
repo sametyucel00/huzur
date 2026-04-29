@@ -28,20 +28,26 @@ export function PaywallScreen() {
   const yearlyLabel = pricing?.yearlyLabel ?? yearly?.priceLabel ?? "799 TL / yıl";
   const monthlyLabel = pricing?.monthlyLabel ?? monthly?.priceLabel ?? "99 TL / ay";
   const yearlyEquivalent = pricing?.yearlyMonthlyEquivalentLabel ?? yearly?.description;
-  const purchaseProvider = process.env.EXPO_PUBLIC_PURCHASE_PROVIDER ?? "mock";
+  const purchaseProvider = process.env.EXPO_PUBLIC_PURCHASE_PROVIDER ?? (process.env.NODE_ENV === "production" ? "store" : "mock");
 
   async function purchase(plan: "monthly" | "yearly") {
     if (process.env.NODE_ENV === "production" && purchaseProvider !== "store") {
-      showInfo("Sükût Ayrıcalık", "Canlı satın alma henüz aktif değil. Store ürün bilgileri eklendiğinde açılacak.");
+      showInfo("Sükût Ayrıcalık", "Canlı satın alma için mağaza sağlayıcısı etkin olmalı.");
       return;
     }
 
     try {
       await purchasePackage(plan);
-      showInfo("Sükût Ayrıcalık", purchaseProvider === "store" ? "Satın alma tamamlandı." : "Geliştirme modunda Sükût Ayrıcalık etkinleştirildi.");
+      showInfo(
+        "Sükût Ayrıcalık",
+        purchaseProvider === "store" ? "Satın alma tamamlandı." : "Geliştirme modunda Sükût Ayrıcalık etkinleştirildi."
+      );
       router.back();
     } catch {
-      showInfo("Satın alma tamamlanamadı", "Bağlantını kontrol edip tekrar deneyebilirsin. Temel özellikler ücretsiz olarak kullanılmaya devam eder.");
+      showInfo(
+        "Satın alma tamamlanamadı",
+        "Bağlantını kontrol edip tekrar deneyebilirsin. Temel özellikler ücretsiz olarak kullanılmaya devam eder."
+      );
     }
   }
 
@@ -59,7 +65,9 @@ export function PaywallScreen() {
       <ContentCard>
         <View style={styles.benefits}>
           {benefits.map((benefit) => (
-            <Text key={benefit} style={[styles.benefit, { color: theme.colors.text }]}>• {benefit}</Text>
+            <Text key={benefit} style={[styles.benefit, { color: theme.colors.text }]}>
+              • {benefit}
+            </Text>
           ))}
         </View>
       </ContentCard>

@@ -45,22 +45,24 @@ export function MoodSelector({ selectedMood, maxItems, onSelect }: MoodSelectorP
 
 const styles = StyleSheet.create({
   grid: {
+    alignSelf: "stretch",
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 12,
+    width: "100%",
     justifyContent: "center"
   },
   card: {
     borderRadius: 22,
     borderWidth: 1,
-    flexBasis: "47%",
+    flexBasis: "46%",
     flexGrow: 1,
     gap: 12,
     maxWidth: "48%",
     minHeight: 86,
     minWidth: 0,
     padding: 14,
-    width: "47%"
+    width: "46%"
   },
   rule: {
     borderRadius: 999,

@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+﻿import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
@@ -90,9 +90,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ animation: "fade", animationDuration: 120, headerShown: false }} />
       <AppDialogHost />
       {showSplash ? (
-        <ImageBackground source={splashImage} resizeMode="cover" style={styles.splash}>
-          <View style={styles.splashShade} />
-        </ImageBackground>
+        <ImageBackground source={splashImage} resizeMode="cover" style={styles.splash} />
       ) : null}
     </>
   );
@@ -121,10 +119,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "#101C34",
     zIndex: 20
-  },
-  splashShade: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(7, 17, 30, 0.04)"
   },
   boundary: {
     flex: 1,
@@ -175,3 +169,4 @@ const styles = StyleSheet.create({
     fontWeight: "900"
   }
 });
+

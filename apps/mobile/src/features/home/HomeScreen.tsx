@@ -139,7 +139,7 @@ export function HomeScreen() {
             <Text style={[styles.textAction, { color: theme.colors.accent }]}>Aç</Text>
           </Pressable>
         </View>
-        <MoodSelector maxItems={4} onSelect={() => router.push("/moods")} />
+        <MoodSelector onSelect={() => router.push("/moods")} />
       </ContentCard>
 
       {prayerTimes.length > 0 ? <PrayerTimeCard times={prayerTimes} nextKey={nextPrayer?.key} /> : null}

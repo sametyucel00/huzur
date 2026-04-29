@@ -34,8 +34,10 @@ export default function TabsLayout() {
           tabBarActiveTintColor: theme.colors.accent,
           tabBarInactiveTintColor: theme.colors.textMuted,
           tabBarItemStyle: {
+            alignItems: "center",
             justifyContent: "center",
-            paddingTop: 3,
+            paddingBottom: 0,
+            paddingTop: 2,
             minWidth: 0
           },
           tabBarIcon: ({ color, size }: { color: string; size: number }) => (
@@ -46,7 +48,9 @@ export default function TabsLayout() {
           },
           tabBarLabelStyle: {
             fontSize: 9,
-            fontWeight: "800"
+            fontWeight: "800",
+            lineHeight: 12,
+            marginTop: 1
           },
           tabBarStyle: {
             backgroundColor: theme.colors.surface,
@@ -54,14 +58,15 @@ export default function TabsLayout() {
             borderRadius: 24,
             borderTopWidth: 1,
             borderWidth: 1,
-            bottom: Math.max(4, insets.bottom > 0 ? insets.bottom - 8 : 4),
+            bottom: Math.max(8, insets.bottom > 0 ? insets.bottom + 2 : 8),
             elevation: 0,
-            height: 64,
-            left: 8,
-            paddingBottom: 6,
-            paddingTop: 6,
+            height: 66,
+            left: 10,
+            paddingBottom: 7,
+            paddingHorizontal: 4,
+            paddingTop: 7,
             position: "absolute",
-            right: 8,
+            right: 10,
             shadowColor: theme.mode === "dark" ? "#000000" : "#0B1628",
             shadowOpacity: theme.mode === "dark" ? 0.28 : 0.08,
             shadowRadius: 18,
