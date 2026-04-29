@@ -1,13 +1,14 @@
-import { Pressable, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 import { useAppTheme } from "@/theme/useAppTheme";
 
 interface ButtonProps {
   label: string;
   onPress?: () => void;
   accessibilityLabel?: string;
+  style?: StyleProp<ViewStyle>;
 }
 
-export function SecondaryButton({ label, onPress, accessibilityLabel }: ButtonProps) {
+export function SecondaryButton({ label, onPress, accessibilityLabel, style }: ButtonProps) {
   const theme = useAppTheme();
 
   return (
@@ -15,7 +16,7 @@ export function SecondaryButton({ label, onPress, accessibilityLabel }: ButtonPr
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
       onPress={onPress}
-      style={[styles.button, { backgroundColor: theme.colors.surfaceMuted, borderColor: theme.colors.border }]}
+      style={[styles.button, { backgroundColor: theme.colors.surfaceMuted, borderColor: theme.colors.border }, style]}
     >
       <Text style={[styles.text, { color: theme.colors.text }]}>{label}</Text>
     </Pressable>

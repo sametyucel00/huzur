@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Platform, Text, View, StyleSheet } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { tr, type NotificationPreferences, type ThemeMode } from "@sukut/shared";
 import { AppHeader } from "@/components/AppHeader";
@@ -98,6 +98,18 @@ export function SettingsScreen() {
           <SecondaryButton label={profile?.city ?? "İstanbul"} onPress={() => setCityPickerVisible(true)} />
         </View>
       </View>
+
+      <ContentCard style={{ backgroundColor: theme.colors.primarySoft }}>
+        <Text style={[styles.plusKicker, { color: theme.colors.accent }]}>Sükût Ayrıcalık</Text>
+        <Text style={[theme.typography.section, { color: "#FFF8ED" }]}>
+          {isPremium ? "Ayrıcalık etkin" : "Daha derin alışkanlık alanı"}
+        </Text>
+        <Text style={[theme.typography.caption, { color: "#EDE4D7" }]}>
+          Haftalık içgörü, gelişmiş ilerleme ve özel planlar tek bir sakin alanda.
+        </Text>
+        <SecondaryButton label={isPremium ? "Ayrıcalık detayları" : "Ayrıcalığı incele"} onPress={() => router.push("/paywall")} />
+      </ContentCard>
+
       <ContentCard>
         <Text style={[theme.typography.section, { color: theme.colors.text }]}>Bildirimler</Text>
         <SecondaryButton label="Bildirim izni iste" onPress={explainNotifications} />
@@ -114,25 +126,27 @@ export function SettingsScreen() {
           />
         ))}
       </ContentCard>
+
       <ContentCard>
         <Text style={[theme.typography.section, { color: theme.colors.text }]}>Bilgi</Text>
         <View style={styles.infoRow}>
           <View style={styles.infoButton}>
-            <SecondaryButton label="Gizlilik" onPress={() => router.push("/privacy")} />
+            <SecondaryButton label="Gizlilik" onPress={() => router.push("/privacy")} style={styles.equalInfoButton} />
           </View>
           <View style={styles.infoButton}>
-            <SecondaryButton label="Kaynaklar" onPress={() => router.push("/sources")} />
+            <SecondaryButton label="Kaynaklar" onPress={() => router.push("/sources")} style={styles.equalInfoButton} />
           </View>
         </View>
       </ContentCard>
+
       {showDevPremiumToggle ? (
         <ContentCard>
-          <Text style={[theme.typography.section, { color: theme.colors.text }]}>Sükût Ayrıcalık önizleme</Text>
+          <Text style={[theme.typography.section, { color: theme.colors.text }]}>Ayrıcalık önizleme</Text>
           <Text style={[theme.typography.body, { color: theme.colors.textMuted }]}>
             Geliştirme ortamında Ayrıcalık deneyimini cihazdan önizleyebilirsin.
           </Text>
           <SecondaryButton
-            label={isPremium ? "Ayrıcalık önizlemeyi kapat" : "Ayrıcalık önizlemeyi aç"}
+            label={isPremium ? "Önizlemeyi kapat" : "Önizlemeyi aç"}
             onPress={() =>
               setMockPremiumForDevelopment(!isPremium).catch(() =>
                 showInfo("Önizleme değiştirilemedi", "Sükût Ayrıcalık önizlemesi şu anda güncellenemedi.")
@@ -141,6 +155,7 @@ export function SettingsScreen() {
           />
         </ContentCard>
       ) : null}
+
       <SecondaryButton label={tr.settings.dataReset} onPress={confirmReset} />
       <CityPickerModal
         visible={cityPickerVisible}
@@ -160,17 +175,22 @@ const styles = StyleSheet.create({
   quickRow: {
     alignSelf: "stretch",
     flexDirection: "row",
-    gap: 12,
+    gap: 10,
     width: "100%"
   },
   quickItem: {
-    borderRadius: 24,
+    borderRadius: 22,
     borderWidth: 1,
     flex: 1,
     gap: 10,
-    padding: 14
+    minWidth: 0,
+    padding: 12
   },
   quickLabel: {
+    fontSize: 11,
+    fontWeight: "900"
+  },
+  plusKicker: {
     fontSize: 11,
     fontWeight: "900"
   },
@@ -181,11 +201,10 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   infoButton: {
-    flex: 1
+    flex: 1,
+    minWidth: 0
   },
-  shortcutGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10
+  equalInfoButton: {
+    width: "100%"
   }
 });

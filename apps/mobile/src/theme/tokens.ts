@@ -60,13 +60,13 @@ export const radius = {
 
 export const typography = {
   display: {
-    fontSize: 38,
-    lineHeight: 44,
+    fontSize: 32,
+    lineHeight: 38,
     fontWeight: "800" as const
   },
   title: {
-    fontSize: 27,
-    lineHeight: 33,
+    fontSize: 24,
+    lineHeight: 30,
     fontWeight: "800" as const
   },
   section: {

@@ -81,7 +81,8 @@ const styles = StyleSheet.create({
   },
   copy: {
     flex: 1,
-    gap: 2
+    gap: 2,
+    minWidth: 0
   },
   label: {
     fontSize: 15,
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     fontWeight: "900"
   },
   time: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "900"
   }
 });

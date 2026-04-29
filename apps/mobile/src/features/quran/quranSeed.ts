@@ -43,8 +43,10 @@ export const fallbackQuranChapters: QuranChapterSummary[] = [
   }
 ];
 
+const fallbackFatihaChapter = fallbackQuranChapters[0]!;
+
 export const fallbackQuranChapterOne: QuranChapter = {
-  ...fallbackQuranChapters[0],
+  ...fallbackFatihaChapter,
   verses: [
     {
       id: 1,

@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 24,
     justifyContent: "center",
+    flexShrink: 0,
     width: 24
   },
   markInner: {
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
+    minWidth: 0,
     fontSize: 15,
     fontWeight: "800"
   }

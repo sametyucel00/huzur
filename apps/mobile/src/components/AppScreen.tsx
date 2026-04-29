@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppTheme } from "@/theme/useAppTheme";
 
@@ -9,6 +9,8 @@ interface AppScreenProps extends PropsWithChildren {
 
 export function AppScreen({ children, scroll = true }: AppScreenProps) {
   const theme = useAppTheme();
+  const { width } = useWindowDimensions();
+  const horizontalPadding = width < 360 ? 14 : 18;
   const content = (
     <View
       style={[
@@ -16,7 +18,7 @@ export function AppScreen({ children, scroll = true }: AppScreenProps) {
         Platform.OS === "web" ? [styles.webFrame, theme.shadows.deep, { backgroundColor: theme.colors.background }] : null
       ]}
     >
-      <View style={styles.content}>{children}</View>
+      <View style={[styles.content, { paddingHorizontal: horizontalPadding }]}>{children}</View>
     </View>
   );
 
@@ -36,19 +38,19 @@ export function AppScreen({ children, scroll = true }: AppScreenProps) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "stretch"
   },
   scroll: {
     flexGrow: 1,
-    width: "100%"
+    width: "100%",
+    alignItems: "stretch"
   },
   content: {
     alignItems: "stretch",
     flex: 1,
-    gap: 20,
-    paddingHorizontal: 20,
-    paddingBottom: 116,
-    paddingTop: 14,
+    gap: 16,
+    paddingBottom: 102,
+    paddingTop: 10,
     width: "100%",
     maxWidth: 460,
     alignSelf: "center"
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
   frame: {
     alignSelf: "center",
     flex: 1,
-    overflow: "hidden",
+    overflow: "visible",
     width: "100%",
     maxWidth: 460
   },

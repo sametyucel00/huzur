@@ -118,7 +118,7 @@ export function DuasScreen() {
       {filtered.map((dua) => {
         const isFavorite = favoriteContentIds.includes(dua.id);
         const locked = Boolean(dua.isPremium && !isPremium);
-        const openTarget = locked ? "/paywall" : `/dua/${dua.id}`;
+        const openTarget = locked ? "/paywall" : ({ pathname: "/dua/[id]", params: { id: dua.id } } as const);
 
         return (
           <ContentCard key={dua.id}>

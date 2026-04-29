@@ -24,9 +24,10 @@ export function HuzurCard({ title, message }: HuzurCardProps) {
 const styles = StyleSheet.create({
   card: {
     borderRadius: 32,
-    gap: 18,
+    gap: 16,
     overflow: "hidden",
-    padding: 24
+    padding: 20,
+    width: "100%"
   },
   topRule: {
     borderRadius: 999,
@@ -42,9 +43,9 @@ const styles = StyleSheet.create({
     fontWeight: "900"
   },
   title: {
-    maxWidth: "92%"
+    flexShrink: 1
   },
   message: {
-    maxWidth: "96%"
+    flexShrink: 1
   }
 });

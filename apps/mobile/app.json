@@ -9,11 +9,19 @@
     "newArchEnabled": true,
     "ios": {
       "bundleIdentifier": "com.sukut.app",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Sükût, kıble yönünü ve yakın şehir bilgisini daha doğru hesaplamak için konumunu yalnızca uygulamayı kullanırken ister.",
+        "NSLocationTemporaryUsageDescriptionDictionary": {
+          "QiblaAccuracy": "Konum, kıble yönünü daha doğru göstermek için kullanılır."
+        }
+      }
     },
     "android": {
       "package": "com.sukut.app",
       "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
         "POST_NOTIFICATIONS"
       ],
       "adaptiveIcon": {
@@ -35,6 +43,12 @@
     "plugins": [
       "expo-router",
       "expo-sqlite",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Sükût, kıble yönünü ve yakın şehir bilgisini daha doğru hesaplamak için konumunu yalnızca uygulamayı kullanırken ister."
+        }
+      ],
       [
         "expo-notifications",
         {

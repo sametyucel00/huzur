@@ -39,13 +39,17 @@ function normalizeChapter(chapter: QuranChapter): QuranChapter {
 export async function loadQuranChapters(): Promise<QuranChapterSummary[]> {
   const cached = await readCachedChapters();
 
+  if (cached?.length) {
+    return cached;
+  }
+
   try {
     const remote = await fetchJson<QuranChapterSummary[]>(quranDataSource.chapterIndexUrl);
     const chapters = remote.map(normalizeChapterSummary);
     await writeCachedChapters(chapters);
     return chapters;
   } catch {
-    return cached ?? fallbackQuranChapters;
+    return fallbackQuranChapters;
   }
 }
 

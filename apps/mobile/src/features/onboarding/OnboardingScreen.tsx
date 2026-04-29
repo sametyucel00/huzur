@@ -1,22 +1,52 @@
-import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ImageBackground, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import { AppScreen } from "@/components/AppScreen";
 import { BadgePill } from "@/components/BadgePill";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { SecondaryButton } from "@/components/SecondaryButton";
+import { requestLocalNotificationPermission } from "@/services/notifications/localNotifications";
 import { useAppTheme } from "@/theme/useAppTheme";
+import { showInfo } from "@/utils/dialog";
 
 const splashImage = require("../../../assets/splash.png");
+const ONBOARDING_SEEN_KEY = "sukut:onboardingSeen";
 
 const steps = [
   "Günlük dua, zikir ve Kur'an okuma ritmini sade bir alanda topla.",
   "Namaz vakitleri, kıble ve temel ibadet araçlarını ücretsiz kullan.",
-  "İlerlemeni cihazında tut; kişisel ibadet verilerin hesabına bağlanmadan saklanır."
+  "İlerlemeni cihazında tut; kişisel ibadet verilerin dışarı gönderilmez."
 ];
 
 export function OnboardingScreen() {
   const router = useRouter();
   const theme = useAppTheme();
+
+  const finish = async () => {
+    await AsyncStorage.setItem(ONBOARDING_SEEN_KEY, "true").catch(() => undefined);
+    router.replace("/");
+  };
+
+  const requestLocation = async () => {
+    if (Platform.OS === "web") {
+      showInfo("Konum izni", "Konum izni Android ve iOS uygulamasında istenir. Web önizlemede şehir seçimiyle devam edebilirsin.");
+      return;
+    }
+
+    const result = await Location.requestForegroundPermissionsAsync().catch(() => null);
+    showInfo("Konum izni", result?.granted ? "Konum izni verildi." : "Konum izni verilmedi; manuel şehir seçimiyle devam edebilirsin.");
+  };
+
+  const requestNotifications = async () => {
+    if (Platform.OS === "web") {
+      showInfo("Bildirim izni", "Bildirim izni Android ve iOS uygulamasında istenir.");
+      return;
+    }
+
+    const result = await requestLocalNotificationPermission().catch(() => ({ granted: false }));
+    showInfo("Bildirim izni", result.granted ? "Bildirim izni verildi." : "Bildirim izni verilmedi; ayarlardan tekrar deneyebilirsin.");
+  };
 
   return (
     <AppScreen>
@@ -33,12 +63,17 @@ export function OnboardingScreen() {
         {steps.map((item, index) => (
           <View key={item} style={[styles.step, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
             <Text style={[styles.stepNumber, { color: theme.colors.accent }]}>{index + 1}</Text>
-            <Text style={[theme.typography.body, { color: theme.colors.text }]}>{item}</Text>
+            <Text style={[theme.typography.body, styles.stepText, { color: theme.colors.text }]}>{item}</Text>
           </View>
         ))}
       </View>
 
-      <PrimaryButton label="Başla" onPress={() => router.replace("/")} />
+      <View style={styles.permissionRow}>
+        <SecondaryButton label="Konum izni" onPress={requestLocation} />
+        <SecondaryButton label="Bildirim izni" onPress={requestNotifications} />
+      </View>
+
+      <PrimaryButton label="Başla" onPress={finish} />
       <View style={styles.secondaryActions}>
         <Pressable accessibilityRole="button" onPress={() => router.push("/privacy")} style={styles.textAction}>
           <Text style={[styles.textActionLabel, { color: theme.colors.textMuted }]}>Gizlilik</Text>
@@ -51,13 +86,13 @@ export function OnboardingScreen() {
 
 const styles = StyleSheet.create({
   hero: {
-    borderRadius: 34,
-    minHeight: 430,
+    borderRadius: 30,
     justifyContent: "flex-end",
+    minHeight: 360,
     overflow: "hidden"
   },
   heroImage: {
-    borderRadius: 34
+    borderRadius: 30
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -65,36 +100,45 @@ const styles = StyleSheet.create({
   },
   heroContent: {
     gap: 12,
-    padding: 24
+    padding: 22
   },
   title: {
     color: "#FFF8ED",
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: "900",
-    lineHeight: 42
+    lineHeight: 36
   },
   subtitle: {
     color: "#EDE4D7",
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "700",
-    lineHeight: 24
+    lineHeight: 22
   },
   steps: {
     gap: 10
   },
   step: {
     alignItems: "center",
-    borderRadius: 24,
+    borderRadius: 22,
     borderWidth: 1,
     flexDirection: "row",
-    gap: 14,
-    minHeight: 72,
-    padding: 16
+    gap: 12,
+    minHeight: 68,
+    padding: 14
   },
   stepNumber: {
     fontSize: 16,
     fontWeight: "900",
     width: 22
+  },
+  stepText: {
+    flex: 1,
+    minWidth: 0
+  },
+  permissionRow: {
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "center"
   },
   secondaryActions: {
     alignItems: "center",

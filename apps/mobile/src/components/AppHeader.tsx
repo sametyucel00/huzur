@@ -13,8 +13,8 @@ export function AppHeader({ eyebrow, title, subtitle }: AppHeaderProps) {
   return (
     <View style={styles.wrap}>
       {eyebrow ? <Text style={[styles.eyebrow, { color: theme.colors.accent }]}>{eyebrow.toLocaleUpperCase("tr-TR")}</Text> : null}
-      <Text style={[theme.typography.display, { color: theme.colors.text }]}>{title}</Text>
-      {subtitle ? <Text style={[theme.typography.body, { color: theme.colors.textMuted }]}>{subtitle}</Text> : null}
+      <Text style={[theme.typography.display, styles.title, { color: theme.colors.text }]}>{title}</Text>
+      {subtitle ? <Text style={[theme.typography.body, styles.subtitle, { color: theme.colors.textMuted }]}>{subtitle}</Text> : null}
     </View>
   );
 }
@@ -22,7 +22,14 @@ export function AppHeader({ eyebrow, title, subtitle }: AppHeaderProps) {
 const styles = StyleSheet.create({
   wrap: {
     gap: 8,
-    paddingTop: 4
+    paddingTop: 4,
+    minWidth: 0
+  },
+  title: {
+    flexShrink: 1
+  },
+  subtitle: {
+    flexShrink: 1
   },
   eyebrow: {
     fontSize: 11,

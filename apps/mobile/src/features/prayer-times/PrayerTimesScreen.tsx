@@ -89,10 +89,10 @@ export function PrayerTimesScreen() {
 
 const styles = StyleSheet.create({
   hero: {
-    borderRadius: 34,
+    borderRadius: 30,
     gap: 12,
     minHeight: 190,
-    padding: 24,
+    padding: 20,
     alignSelf: "stretch",
     width: "100%"
   },
@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
     fontWeight: "900"
   },
   heroTitle: {
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: "900",
-    lineHeight: 36,
-    maxWidth: "92%"
+    lineHeight: 32,
+    flexShrink: 1
   },
   remainingBlock: {
     gap: 8,

@@ -167,23 +167,24 @@ function getVisibleEvents(events: SpecialEventContent[], date: Date, isPremium: 
 
 const styles = StyleSheet.create({
   nextPrayer: {
-    alignItems: "center",
+    alignItems: "flex-start",
     borderRadius: 28,
     borderWidth: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     gap: 14,
     minHeight: 86,
-    padding: 18
+    padding: 16,
+    width: "100%"
   },
   nextPrayerCopy: {
-    flex: 1,
-    gap: 4
+    gap: 4,
+    width: "100%"
   },
   remaining: {
-    fontSize: 15,
+    alignSelf: "flex-start",
+    fontSize: 18,
     fontWeight: "900",
-    maxWidth: 112,
-    textAlign: "right"
+    textAlign: "left"
   },
   rhythmRow: {
     flexDirection: "row",
@@ -205,10 +206,12 @@ const styles = StyleSheet.create({
   areaButton: {
     borderRadius: 18,
     borderWidth: 1,
+    flexGrow: 1,
+    flexBasis: "47%",
     minHeight: 54,
     justifyContent: "center",
-    paddingHorizontal: 14,
-    width: "48%"
+    minWidth: 0,
+    paddingHorizontal: 14
   },
   areaTitle: {
     fontSize: 14,

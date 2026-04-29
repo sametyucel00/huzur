@@ -1,7 +1,8 @@
-import { Stack } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ImageBackground, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useContentStore } from "@/stores/contentStore";
 import { initializeLocalNotifications } from "@/services/notifications/localNotifications";
 import { useLocalProfileStore } from "@/stores/localProfileStore";
@@ -9,8 +10,28 @@ import { useLocalProgressStore } from "@/stores/localProgressStore";
 import { useSubscriptionStore } from "@/stores/subscriptionStore";
 import { useAppTheme } from "@/theme/useAppTheme";
 
+const splashImage = require("../assets/splash.png");
+const ONBOARDING_SEEN_KEY = "sukut:onboardingSeen";
+
+const scalableText = Text as unknown as { defaultProps?: Record<string, unknown> };
+const scalableTextInput = TextInput as unknown as { defaultProps?: Record<string, unknown> };
+
+scalableText.defaultProps = {
+  ...scalableText.defaultProps,
+  maxFontSizeMultiplier: 1.12
+};
+
+scalableTextInput.defaultProps = {
+  ...scalableTextInput.defaultProps,
+  maxFontSizeMultiplier: 1.08
+};
+
 export default function RootLayout() {
   const theme = useAppTheme();
+  const router = useRouter();
+  const segments = useSegments();
+  const [showSplash, setShowSplash] = useState(true);
+  const [onboardingSeen, setOnboardingSeen] = useState<boolean | null>(null);
   const hydrate = useContentStore((state) => state.hydrate);
   const hydrateProfile = useLocalProfileStore((state) => state.hydrate);
   const hydrateProgress = useLocalProgressStore((state) => state.hydrate);
@@ -30,10 +51,43 @@ export default function RootLayout() {
     }
   }, [hydrate, hydrateProfile, hydrateProgress, hydrateSubscription]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 2600);
+    AsyncStorage.getItem(ONBOARDING_SEEN_KEY)
+      .then((value) => setOnboardingSeen(value === "true"))
+      .catch(() => setOnboardingSeen(false));
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (showSplash || onboardingSeen === null) {
+      return;
+    }
+
+    const currentRoute = segments.join("/");
+    if (!onboardingSeen && !currentRoute.includes("onboarding")) {
+      AsyncStorage.getItem(ONBOARDING_SEEN_KEY)
+        .then((value) => {
+          if (value === "true") {
+            setOnboardingSeen(true);
+            return;
+          }
+
+          router.replace("/onboarding");
+        })
+        .catch(() => router.replace("/onboarding"));
+    }
+  }, [onboardingSeen, router, segments, showSplash]);
+
   return (
     <>
       <StatusBar style={theme.mode === "dark" ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack screenOptions={{ animation: "fade", animationDuration: 120, headerShown: false }} />
+      {showSplash ? (
+        <ImageBackground source={splashImage} resizeMode="cover" style={styles.splash}>
+          <View style={styles.splashShade} />
+        </ImageBackground>
+      ) : null}
     </>
   );
 }
@@ -57,6 +111,15 @@ export function ErrorBoundary({ error, retry }: { error: Error; retry: () => voi
 }
 
 const styles = StyleSheet.create({
+  splash: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "#101C34",
+    zIndex: 20
+  },
+  splashShade: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(7, 17, 30, 0.04)"
+  },
   boundary: {
     flex: 1,
     justifyContent: "center",

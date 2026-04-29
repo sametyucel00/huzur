@@ -30,7 +30,7 @@ const dailyPlanVariants: TaskDefinition[][] = [
 function getDailyTaskDefinitions(date: string): TaskDefinition[] {
   const parsedDate = new Date(`${date}T12:00:00`);
   const index = getDayOfYearIndex(Number.isNaN(parsedDate.getTime()) ? new Date() : parsedDate) % dailyPlanVariants.length;
-  return dailyPlanVariants[index] ?? dailyPlanVariants[0];
+  return dailyPlanVariants[index] ?? dailyPlanVariants[0]!;
 }
 
 function formatDateTr(dateKey: string) {

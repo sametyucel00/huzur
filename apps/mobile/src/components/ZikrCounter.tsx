@@ -1,6 +1,5 @@
 import { Animated, Pressable, Text, View, StyleSheet } from "react-native";
 import { useRef } from "react";
-import * as Haptics from "expo-haptics";
 import { useAppTheme } from "@/theme/useAppTheme";
 
 interface ZikrCounterProps {
@@ -15,7 +14,6 @@ export function ZikrCounter({ count, target, onIncrement }: ZikrCounterProps) {
   const progress = Math.min(100, Math.round((count / target) * 100));
 
   const handlePress = () => {
-    Haptics.selectionAsync().catch(() => undefined);
     Animated.sequence([
       Animated.timing(ringScale, {
         duration: 90,
