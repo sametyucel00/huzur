@@ -3,16 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sükût | Gizlilik, Koşullar ve Kaynaklar</title>
+    <title>Sükût | Gizlilik, Destek ve Kullanım Koşulları</title>
     <meta
       name="description"
-      content="Sükût uygulaması gizlilik politikası, kullanım koşulları, dini içerik kaynakları ve iletişim bilgileri."
+      content="Sükût mobil uygulaması için gizlilik politikası, kullanım koşulları, destek, abonelik ve dini içerik kaynakları."
     />
     <style>
       :root {
         --night: #101c34;
         --ink: #172033;
-        --pearl: #f8f5ee;
+        --muted: #657086;
+        --paper: #f8f5ee;
+        --surface: #fffdf8;
         --sand: #dcc9a6;
         --amber: #d8a84e;
         --mint: #9acec2;
@@ -23,139 +25,338 @@
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
-        background: linear-gradient(180deg, #101c34 0%, #172033 36%, #f8f5ee 36%);
+        background: var(--paper);
         color: var(--ink);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
       header {
-        color: var(--pearl);
-        padding: 72px 20px 56px;
+        background: radial-gradient(circle at 50% 0%, rgba(216, 168, 78, 0.24), transparent 34%), var(--night);
+        color: var(--paper);
+        padding: 56px 20px 44px;
+      }
+
+      .hero {
+        margin: 0 auto;
+        max-width: 980px;
         text-align: center;
       }
 
-      header img {
-        width: 96px;
-        height: 96px;
-        border-radius: 24px;
-        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.25);
+      .hero img {
+        border-radius: 26px;
+        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+        height: 104px;
+        width: 104px;
       }
 
       h1 {
         font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(44px, 9vw, 86px);
+        font-size: clamp(48px, 10vw, 92px);
         font-weight: 400;
+        letter-spacing: 0;
         margin: 20px 0 8px;
       }
 
-      header p {
-        color: rgba(248, 245, 238, 0.76);
-        margin: 0 auto;
-        max-width: 680px;
+      .tagline {
+        color: rgba(248, 245, 238, 0.78);
+        font-size: 18px;
         line-height: 1.65;
+        margin: 0 auto;
+        max-width: 700px;
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 28px;
+      }
+
+      nav a {
+        border: 1px solid rgba(220, 201, 166, 0.35);
+        border-radius: 999px;
+        color: var(--paper);
+        font-size: 14px;
+        font-weight: 800;
+        padding: 10px 14px;
+        text-decoration: none;
       }
 
       main {
         display: grid;
         gap: 18px;
-        margin: -24px auto 64px;
+        margin: 0 auto;
         max-width: 980px;
-        padding: 0 20px;
+        padding: 22px 20px 64px;
       }
 
       section {
-        background: rgba(255, 253, 248, 0.95);
-        border: 1px solid rgba(220, 201, 166, 0.7);
-        border-radius: 8px;
-        box-shadow: 0 18px 50px rgba(16, 28, 52, 0.1);
+        background: var(--surface);
+        border: 1px solid rgba(220, 201, 166, 0.75);
+        border-radius: 14px;
+        box-shadow: 0 18px 50px rgba(16, 28, 52, 0.08);
         padding: 24px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       h2 {
         color: var(--night);
+        font-size: 24px;
         margin: 0 0 12px;
+      }
+
+      h3 {
+        color: var(--night);
+        font-size: 18px;
+        margin: 18px 0 8px;
       }
 
       p,
       li {
-        line-height: 1.7;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.75;
+      }
+
+      ul {
+        margin: 10px 0 0;
+        padding-left: 20px;
       }
 
       a {
         color: #7b5a1c;
-        font-weight: 700;
+        font-weight: 800;
       }
 
-      .meta {
-        color: rgba(23, 32, 51, 0.62);
+      .meta,
+      .small {
+        color: var(--muted);
         font-size: 14px;
       }
 
+      .pill {
+        background: rgba(154, 206, 194, 0.2);
+        border-radius: 999px;
+        color: var(--night);
+        display: inline-flex;
+        font-size: 13px;
+        font-weight: 900;
+        margin-bottom: 12px;
+        padding: 7px 11px;
+      }
+
       footer {
-        color: rgba(23, 32, 51, 0.64);
-        padding: 0 20px 48px;
+        color: rgba(23, 32, 51, 0.62);
+        padding: 0 20px 42px;
         text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        section {
+          padding: 20px;
+        }
       }
     </style>
   </head>
   <body>
     <header>
-      <img src="./icon.png" alt="Sükût uygulama ikonu" />
-      <h1>Sükût</h1>
-      <p>Gizlilik, kullanım koşulları, dini içerik kaynakları ve uygulama hakkında kısa bilgilendirme.</p>
+      <div class="hero">
+        <img src="./icon.png" alt="Sükût uygulama ikonu" />
+        <h1>Sükût</h1>
+        <p class="tagline">Dua, zikir, Kur'an okuma, namaz vakitleri ve günlük manevi alışkanlıklar için sakin bir mobil alan.</p>
+        <nav aria-label="Sayfa bölümleri">
+          <a href="#privacy">Gizlilik</a>
+          <a href="#terms">Koşullar</a>
+          <a href="#subscription">Abonelik</a>
+          <a href="#support">Destek</a>
+          <a href="#sources">Kaynaklar</a>
+          <a href="#delete-data">Veri Silme</a>
+        </nav>
+      </div>
     </header>
 
     <main>
-      <section id="privacy">
-        <p class="meta">Son güncelleme: 27 Nisan 2026</p>
-        <h2>Gizlilik Politikası</h2>
+      <section>
+        <span class="pill">Son güncelleme: 29 Nisan 2026</span>
+        <h2>Uygulama Hakkında</h2>
         <p>
-          Sükût'u kullanmak için hesap açman gerekmez. Favorilerin, günlük hedeflerin, devam bilgilerin, zikir sayacın,
-          şehir, tema ve bildirim tercihlerin cihazında saklanır.
+          Sükût; dini içerik, ibadet alışkanlığı ve spiritual wellness odağında hazırlanmış bir mobil uygulamadır. Uygulama
+          temel ibadet araçlarını ücretsiz sunar; Sükût Ayrıcalık ise gelişmiş alışkanlık takibi, kişisel planlar ve daha
+          derin ilerleme alanları sağlar.
+        </p>
+        <p class="small">Paket adı: <strong>com.sukut.app</strong></p>
+      </section>
+
+      <div class="grid">
+        <section id="privacy">
+          <h2>Gizlilik Politikası</h2>
+          <p>
+            Sükût'u kullanmak için hesap açman gerekmez. Favorilerin, günlük hedeflerin, devam bilgilerin, zikir sayacın,
+            Kur'an okuma ilerlemen, şehir, tema ve bildirim tercihlerin cihazında saklanır.
+          </p>
+          <p>
+            Uygulama aktif dua, zikir, günlük içerik, özel gün içeriği, kategori, bildirim metni ve uygulama ayarlarını
+            güncel tutmak için internetten içerik alabilir. Kişisel ibadet verilerin Firebase'e veya üçüncü kişilere
+            gönderilmez.
+          </p>
+          <p>
+            Konum izni yalnızca namaz vakti, yakın şehir ve kıble yönünü daha doğru göstermek için istenir. Bildirim izni
+            yalnızca kullanıcının seçtiği hatırlatmaları göstermek için kullanılır.
+          </p>
+        </section>
+
+        <section id="terms">
+          <h2>Kullanım Koşulları</h2>
+          <p>
+            Sükût; dua, zikir, Kur'an okuma, namaz vakitleri, kıble ve günlük manevi alışkanlık takibini destekleyen bir
+            uygulamadır. Uygulama fetva veren bir hizmet değildir.
+          </p>
+          <p>
+            Ruh haline göre öneriler manevi destek ve kişisel düzen kurma amacı taşır. Psikolojik, tıbbi veya dini
+            danışmanlık yerine geçmez. İhtiyaç duyduğunda ehil bir kişiden veya sağlık uzmanından destek almalısın.
+          </p>
+          <p>
+            Uygulamayı kullanarak içeriklerin bilgilendirme ve alışkanlık desteği amacıyla sunulduğunu kabul etmiş olursun.
+          </p>
+        </section>
+      </div>
+
+      <section id="subscription">
+        <h2>Sükût Ayrıcalık ve Satın Alımlar</h2>
+        <p>
+          Sükût Ayrıcalık; haftalık içgörü, gelişmiş ilerleme takibi, özel huzur planları, gelişmiş günlük planlar ve
+          reklamsız kullanım gibi ek deneyimler sunar. Temel dua, zikir, Kur'an okuma, namaz vakitleri ve kıble özellikleri
+          ücretsiz kalır.
+        </p>
+        <h3>Abonelik Ürünleri</h3>
+        <ul>
+          <li>Aylık abonelik: <strong>Sükût Ayrıcalık Aylık</strong></li>
+          <li>Yıllık abonelik: <strong>Sükût Ayrıcalık Yıllık</strong></li>
+          <li>Apple product id: <strong>sukut_privilege_monthly</strong> ve <strong>sukut_privilege_yearly</strong></li>
+        </ul>
+
+        <h3>Otomatik Yenileme ve Ücretlendirme</h3>
+        <ul>
+          <li>Abonelikler otomatik yenilenir.</li>
+          <li>Satın alma onaylandığında ödeme Apple ID hesabına yansıtılır.</li>
+          <li>Mevcut abonelik dönemi bitmeden en az 24 saat önce iptal edilmezse abonelik otomatik olarak yenilenir.</li>
+          <li>Yenileme ücreti, mevcut dönem bitmeden önceki 24 saat içinde Apple ID hesabından tahsil edilebilir.</li>
+          <li>Fiyatlar ülkeye, para birimine ve App Store fiyatlandırmasına göre değişebilir.</li>
+        </ul>
+
+        <h3>Aboneliği Yönetme ve İptal</h3>
+        <p>
+          Aboneliğini satın aldıktan sonra Apple ID hesap ayarlarından yönetebilir veya iptal edebilirsin. Uygulama içinden
+          iptal işlemi doğrudan yapılamaz; iptal ve yenileme yönetimi Apple App Store üzerinden yapılır.
         </p>
         <p>
-          Uygulama dua, zikir, Kur'an okuma, günlük içerik ve özel gün metinlerini güncel tutmak için internetten içerik
-          alabilir. Kişisel ibadet takibin üçüncü kişilerle paylaşılmaz.
+          iOS üzerinde abonelik yönetimi için: <strong>Ayarlar &gt; Apple ID &gt; Abonelikler</strong> yolunu izleyebilirsin.
+        </p>
+
+        <h3>Satın Alımları Geri Yükleme</h3>
+        <p>
+          Cihaz değişikliği, uygulamayı yeniden yükleme veya aktif aboneliğin görünmemesi durumunda uygulama içindeki
+          <strong>Satın alımları geri yükle</strong> butonunu kullanabilirsin. Geri yükleme işlemi Apple hesabındaki aktif
+          abonelikleri kontrol eder ve uygun erişimi yeniden etkinleştirir.
+        </p>
+
+        <h3>İade ve Deneme Süreçleri</h3>
+        <p>
+          İade talepleri ve ödeme itirazları Apple'ın App Store politikalarına göre değerlendirilir. Varsa ücretsiz deneme
+          veya kampanya koşulları App Store satın alma ekranında açıkça gösterilir.
+        </p>
+
+        <h3>Ücretsiz ve Ücretli Özellik Ayrımı</h3>
+        <ul>
+          <li>Ücretsiz: namaz vakitleri, kıble, temel dua koleksiyonu, Kur'an okuma, temel zikir sayacı ve günlük içerikler.</li>
+          <li>Ücretli: gelişmiş ilerleme takibi, haftalık içgörü, özel huzur planları, gelişmiş alışkanlık alanları ve reklamsız deneyim.</li>
+        </ul>
+        <p>
+          Aylık ve yıllık abonelik gelirlerinin %15'inin LÖSEV, İnsani Yardım Vakfı ve İyilik Derneği'ne bağış olarak
+          ayrılması planlanır. Bu bağışların makbuzları aylık olarak sosyal medya hesaplarında şeffaf şekilde paylaşılacaktır.
+        </p>
+        <p class="small">
+          Apple, Apple ID ve App Store; Apple Inc. şirketinin ticari markalarıdır. Satın alma işlemleri Apple'ın ödeme
+          altyapısı üzerinden gerçekleşir.
         </p>
       </section>
 
-      <section id="terms">
-        <h2>Kullanım Koşulları</h2>
-        <p>
-          Sükût; dua, zikir, Kur'an okuma, günlük manevi içerik ve ibadet alışkanlığı takibini destekleyen bir
-          uygulamadır. Uygulama fetva veren bir hizmet değildir.
-        </p>
-        <p>
-          Ruh hâline göre öneriler manevi bir eşlik alanıdır; psikolojik, tıbbi veya dini danışmanlık yerine geçmez.
-          İhtiyaç duyduğunda güvenilir bir uzmandan veya ehil bir kişiden destek almalısın.
-        </p>
-      </section>
+      <div class="grid">
+        <section id="support">
+          <h2>Destek</h2>
+          <p>
+            Uygulama, satın alma, içerik veya teknik sorunlar için destek e-postası:
+            <a href="mailto:sametyucel00@gmail.com">sametyucel00@gmail.com</a>
+          </p>
+          <p>
+            Mesajında cihaz modelini, işletim sistemini, uygulama sürümünü ve yaşadığın sorunu kısa şekilde belirtmen
+            çözümü hızlandırır.
+          </p>
+        </section>
+
+        <section id="delete-data">
+          <h2>Veri Silme</h2>
+          <p>
+            V1'de kullanıcı hesabı yoktur. Bu nedenle kişisel uygulama verilerini cihazından silmek için uygulama içindeki
+            <strong>Ayarlar &gt; Cihazdaki verileri sıfırla</strong> alanını kullanabilirsin.
+          </p>
+          <p>
+            Bu işlem favorileri, hedefleri, zikir ilerlemesini, rozet ilerlemesini ve okuma ilerlemesini cihazdan temizler.
+            İçerik cache'i uygulamanın çevrimdışı çalışması için korunabilir.
+          </p>
+        </section>
+      </div>
 
       <section id="sources">
         <h2>Dini İçerik Kaynakları</h2>
         <p>
-          İçeriklerde mümkün olduğunda kaynak bilgisi gösterilir. Ayet, dua ve zikir metinlerinde hata fark edersen
-          uygulama sahibiyle paylaşman içerik kalitesini korumaya yardımcı olur.
+          İçeriklerde mümkün olduğunda kaynak bilgisi gösterilir. Ayet, dua, zikir veya açıklama metinlerinde hata fark
+          edersen destek adresinden bildirebilirsin.
         </p>
         <ul>
-          <li>Kur'an ayetleri ve meal/tefsir referansları için Diyanet Kur'an Yolu kaynakları.</li>
-          <li>Hadis referansları için Diyanet Hadislerle İslam külliyatı.</li>
-          <li>Temel kavram açıklamaları için Türkiye Diyanet Vakfı İslam Ansiklopedisi.</li>
+          <li>Kur'an ayetleri ve meal referansları için Diyanet kaynakları ve güvenilir mushaf/meal veri setleri.</li>
+          <li>Hadis ve temel dini açıklamalar için Diyanet kaynakları ve Türkiye Diyanet Vakfı İslam Ansiklopedisi.</li>
           <li>Namaz vakitleri için Aladhan API, Diyanet Türkiye hesaplama yöntemi ve offline seed/cache fallback.</li>
         </ul>
       </section>
 
-      <section id="contact">
-        <h2>İletişim</h2>
+      <section id="disclaimer">
+        <h2>Yasal ve İçerik Notu</h2>
         <p>
-          Yayın öncesi iletişim e-postası kesinleştirilmelidir. Geçici iletişim alanı:
-          <a href="mailto:sametyucel00@gmail.com">sametyucel00@gmail.com</a>
+          Sükût, kullanıcıya kesin dini hüküm veya fetva verme iddiası taşımaz. İçerikler düzenli ibadet alışkanlığı,
+          manevi farkındalık ve sakin bir kişisel ritim oluşturma amacıyla sunulur.
+        </p>
+        <p>
+          Uygulama geliştiricisi içerikleri güncelleme, düzeltme, kaldırma veya uygulama özelliklerini geliştirme hakkını
+          saklı tutar.
+        </p>
+        <p>
+          Uygulamada ayrı bir son kullanıcı lisans sözleşmesi sunulmadığı durumlarda Apple'ın standart son kullanıcı lisans
+          sözleşmesi geçerlidir:
+          <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener">Apple Standard EULA</a>.
         </p>
       </section>
     </main>
 
-    <footer>Sükût · com.sukut.app</footer>
+    <footer>
+      <p>Sükût · com.sukut.app</p>
+      <p class="small">© 2026 Sükût. Tüm hakları saklıdır.</p>
+    </footer>
   </body>
 </html>
