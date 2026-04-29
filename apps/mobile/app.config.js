@@ -1,14 +1,14 @@
 const isIosBuild = process.env.EAS_BUILD_PLATFORM === "ios";
 
 const splashConfig = {
-  image: "./assets/splash.png",
-  imageWidth: 430,
-  resizeMode: "cover",
+  image: "./assets/native-splash-icon.png",
+  imageWidth: 1,
+  resizeMode: "contain",
   backgroundColor: "#101C34",
   dark: {
-    image: "./assets/splash.png",
-    imageWidth: 430,
-    resizeMode: "cover",
+    image: "./assets/native-splash-icon.png",
+    imageWidth: 1,
+    resizeMode: "contain",
     backgroundColor: "#101C34",
   },
 };
@@ -60,6 +60,8 @@ module.exports = {
       supportsTablet: true,
       usesNonExemptEncryption: false,
       infoPlist: {
+        UIStatusBarHidden: true,
+        UIViewControllerBasedStatusBarAppearance: false,
         NSLocationWhenInUseUsageDescription:
           "Sükût, kıble yönünü ve yakın şehir bilgisini daha doğru hesaplamak için konumunu yalnızca uygulamayı kullanırken ister.",
         NSMotionUsageDescription:
@@ -82,10 +84,21 @@ module.exports = {
         backgroundColor: "#101C34",
       },
     },
+    androidStatusBar: {
+      hidden: true,
+      translucent: true,
+      backgroundColor: "#101C34",
+      barStyle: "light-content",
+    },
+    androidNavigationBar: {
+      visible: "immersive",
+      backgroundColor: "#101C34",
+      barStyle: "light-content",
+    },
     icon: "./assets/icon.png",
     splash: {
-      image: "./assets/splash.png",
-      resizeMode: "cover",
+      image: "./assets/native-splash-icon.png",
+      resizeMode: "contain",
       backgroundColor: "#101C34",
     },
     web: {

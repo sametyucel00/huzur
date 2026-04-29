@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     flex: 1,
     gap: 16,
-    paddingBottom: 102,
+    paddingBottom: 94,
     paddingTop: 10,
     width: "100%",
     maxWidth: 460,

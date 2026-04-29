@@ -86,7 +86,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <StatusBar style={theme.mode === "dark" ? "light" : "dark"} />
+      <StatusBar hidden translucent style={theme.mode === "dark" ? "light" : "dark"} />
       <Stack screenOptions={{ animation: "fade", animationDuration: 120, headerShown: false }} />
       <AppDialogHost />
       {showSplash ? (
