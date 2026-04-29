@@ -57,6 +57,7 @@ module.exports = {
     newArchEnabled: true,
     ios: {
       bundleIdentifier: "com.sukut.app",
+      buildNumber: "1",
       supportsTablet: true,
       usesNonExemptEncryption: false,
       infoPlist: {
@@ -74,6 +75,7 @@ module.exports = {
     },
     android: {
       package: "com.sukut.app",
+      versionCode: 1,
       permissions: [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
