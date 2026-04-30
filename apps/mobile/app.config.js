@@ -57,7 +57,8 @@ module.exports = {
     newArchEnabled: true,
     ios: {
       bundleIdentifier: "com.sukut.app",
-      buildNumber: "3",
+      buildNumber: "4",
+      requireFullScreen: true,
       supportsTablet: true,
       usesNonExemptEncryption: false,
       infoPlist: {

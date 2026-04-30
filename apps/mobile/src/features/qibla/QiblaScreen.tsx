@@ -12,7 +12,7 @@ import { SecondaryButton } from "@/components/SecondaryButton";
 import { calculateQiblaBearing } from "@/services/qibla/qiblaService";
 import { useLocalProfileStore } from "@/stores/localProfileStore";
 import { useAppTheme } from "@/theme/useAppTheme";
-import { confirmAction, showInfo } from "@/utils/dialog";
+import { showInfo } from "@/utils/dialog";
 
 function normalizeDegree(value: number) {
   return ((value % 360) + 360) % 360;
@@ -80,32 +80,25 @@ export function QiblaScreen() {
       return;
     }
 
-    confirmAction({
-      title: "Konum izni",
-      message: "Konum yalnızca kıble yönünü daha doğru hesaplamak için kullanılır. İzin vermezsen şehir bilgisiyle devam edilir.",
-      confirmText: "İzin iste",
-      onConfirm: () => {
-        Location.requestForegroundPermissionsAsync()
-          .then(async (result) => {
-            if (!result.granted) {
-              showInfo("Konum izni", "Konum izni verilmedi; şehir bilgisiyle devam ediliyor.");
-              return;
-            }
+    Location.requestForegroundPermissionsAsync()
+      .then(async (result) => {
+        if (!result.granted) {
+          showInfo("Konum izni", "Konum izni verilmedi; şehir bilgisiyle devam ediliyor.");
+          return;
+        }
 
-            const position = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
-            const coords = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            };
-            const nearestCity = findNearestCity(coords);
-            setGpsBearing(calculateQiblaBearing(coords));
-            setLocationLabel(`${nearestCity.city} yakınındaki GPS konumu`);
-            await setCity(nearestCity.city).catch(() => undefined);
-            showInfo("Konum güncellendi", `${nearestCity.city} yakınındaki konuma göre kıble yönü güncellendi.`);
-          })
-          .catch(() => showInfo("Konum izni", "Konum alınamadı; şehir bilgisiyle devam ediliyor."));
-      }
-    });
+        const position = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+        const coords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
+        const nearestCity = findNearestCity(coords);
+        setGpsBearing(calculateQiblaBearing(coords));
+        setLocationLabel(`${nearestCity.city} yakınındaki GPS konumu`);
+        await setCity(nearestCity.city).catch(() => undefined);
+        showInfo("Konum güncellendi", `${nearestCity.city} yakınındaki konuma göre kıble yönü güncellendi.`);
+      })
+      .catch(() => showInfo("Konum izni", "Konum alınamadı; şehir bilgisiyle devam ediliyor."));
   };
 
   const sensorText =

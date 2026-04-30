@@ -67,8 +67,11 @@ export function DuasScreen() {
       </View>
       <TextInput
         accessibilityLabel="Dua ara"
+        autoCorrect={false}
+        clearButtonMode="while-editing"
         placeholder="Dua, anlam veya okunuş ara"
         placeholderTextColor={theme.colors.textMuted}
+        returnKeyType="search"
         value={query}
         onChangeText={setQuery}
         style={[styles.search, { backgroundColor: theme.colors.surface, color: theme.colors.text, borderColor: theme.colors.border }]}

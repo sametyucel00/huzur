@@ -82,8 +82,10 @@ export function QuranScreen() {
             <TextInput
               accessibilityLabel="Sure ara"
               autoCorrect={false}
+              clearButtonMode="while-editing"
               placeholder="Sure adı veya numara ara"
               placeholderTextColor={theme.colors.textMuted}
+              returnKeyType="search"
               value={query}
               onChangeText={setQuery}
               style={[styles.search, { backgroundColor: theme.colors.surface, color: theme.colors.text, borderColor: theme.colors.border }]}

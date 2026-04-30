@@ -30,7 +30,7 @@ export function PaywallScreen() {
   const yearlyLabel = pricing?.yearlyLabel ?? yearly?.priceLabel ?? "799 TL / yıl";
   const monthlyLabel = pricing?.monthlyLabel ?? monthly?.priceLabel ?? "99 TL / ay";
   const yearlyEquivalent = pricing?.yearlyMonthlyEquivalentLabel ?? yearly?.description;
-  const purchaseProvider = process.env.EXPO_PUBLIC_PURCHASE_PROVIDER ?? (process.env.NODE_ENV === "production" ? "store" : "mock");
+  const purchaseProvider = process.env.NODE_ENV === "production" ? "store" : (process.env.EXPO_PUBLIC_PURCHASE_PROVIDER ?? "mock");
 
   async function purchase(plan: "monthly" | "yearly") {
     if (process.env.NODE_ENV === "production" && purchaseProvider !== "store") {
@@ -102,7 +102,7 @@ export function PaywallScreen() {
           <SecondaryButton label="Gizlilik politikası" onPress={() => router.push("/privacy")} style={styles.legalButton} />
           <SecondaryButton
             label="Kullanım Koşulları"
-            onPress={() => Linking.openURL(appleStandardEulaUrl)}
+            onPress={() => Linking.openURL(appleStandardEulaUrl).catch(() => showInfo("Bağlantı açılamadı", "Kullanım koşulları bağlantısı şu anda açılamadı."))}
             accessibilityLabel="Kullanım Koşulları EULA bağlantısını aç"
             style={styles.legalButton}
           />

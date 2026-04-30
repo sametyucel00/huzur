@@ -64,21 +64,14 @@ export function SettingsScreen() {
       return;
     }
 
-    confirmAction({
-      title: "Bildirim izni",
-      message: tr.notifications.permissionIntro,
-      confirmText: "İzin iste",
-      onConfirm: () => {
-        requestLocalNotificationPermission()
-          .then((result) => {
-            if (result.granted && profile) {
-              syncNotifications(profile);
-            }
-            showInfo("Bildirim izni", result.granted ? "Bildirim izni verildi." : "Bildirim izni verilmedi.");
-          })
-          .catch(() => showInfo("Bildirim izni", "Bildirim izni alınamadı."));
-      }
-    });
+    requestLocalNotificationPermission()
+      .then((result) => {
+        if (result.granted && profile) {
+          syncNotifications(profile);
+        }
+        showInfo("Bildirim izni", result.granted ? "Bildirim izni verildi." : "Bildirim izni verilmedi.");
+      })
+      .catch(() => showInfo("Bildirim izni", "Bildirim izni alınamadı."));
   };
 
   const confirmReset = () => {

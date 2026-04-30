@@ -33,7 +33,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18
   },
   text: {
+    flexShrink: 1,
     fontSize: 14,
-    fontWeight: "800"
+    fontWeight: "800",
+    textAlign: "center"
   }
 });

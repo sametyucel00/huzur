@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Platform, ScrollView, StyleSheet, View, useWindowDimensions } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppTheme } from "@/theme/useAppTheme";
 
 interface AppScreenProps extends PropsWithChildren {
@@ -9,8 +9,10 @@ interface AppScreenProps extends PropsWithChildren {
 
 export function AppScreen({ children, scroll = true }: AppScreenProps) {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const horizontalPadding = width < 360 ? 14 : 18;
+  const bottomPadding = Platform.OS === "ios" ? Math.max(112, insets.bottom + 98) : 94;
   const content = (
     <View
       style={[
@@ -18,7 +20,7 @@ export function AppScreen({ children, scroll = true }: AppScreenProps) {
         Platform.OS === "web" ? [styles.webFrame, theme.shadows.deep, { backgroundColor: theme.colors.background }] : null
       ]}
     >
-      <View style={[styles.content, { paddingHorizontal: horizontalPadding }]}>{children}</View>
+      <View style={[styles.content, { paddingBottom: bottomPadding, paddingHorizontal: horizontalPadding }]}>{children}</View>
     </View>
   );
 
@@ -49,7 +51,6 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     flex: 1,
     gap: 16,
-    paddingBottom: 94,
     paddingTop: 10,
     width: "100%",
     maxWidth: 460,

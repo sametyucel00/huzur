@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { includesTurkishSearch, TURKEY_PRAYER_CITIES } from "@sukut/shared";
 import { useAppTheme } from "@/theme/useAppTheme";
 
@@ -12,6 +13,7 @@ interface CityPickerModalProps {
 
 export function CityPickerModal({ visible, selectedCity, onClose, onSelect }: CityPickerModalProps) {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const [query, setQuery] = useState("");
   const cities = useMemo(
     () => TURKEY_PRAYER_CITIES.filter((item) => includesTurkishSearch(item.city, query)),
@@ -21,7 +23,11 @@ export function CityPickerModal({ visible, selectedCity, onClose, onSelect }: Ci
   return (
     <Modal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>
-        <View style={[styles.sheet, { backgroundColor: theme.colors.surface }]} onStartShouldSetResponder={() => true}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={[styles.sheet, { backgroundColor: theme.colors.surface, paddingBottom: Math.max(24, insets.bottom + 14) }]}
+          onStartShouldSetResponder={() => true}
+        >
           <View style={styles.handle} />
           <Text style={[theme.typography.section, { color: theme.colors.text }]}>Şehir seç</Text>
           <Text style={[theme.typography.caption, { color: theme.colors.textMuted }]}>
@@ -30,8 +36,10 @@ export function CityPickerModal({ visible, selectedCity, onClose, onSelect }: Ci
           <TextInput
             autoCapitalize="words"
             autoCorrect={false}
+            clearButtonMode="while-editing"
             placeholder="Şehir ara"
             placeholderTextColor={theme.colors.textMuted}
+            returnKeyType="search"
             value={query}
             onChangeText={setQuery}
             style={[
@@ -70,7 +78,7 @@ export function CityPickerModal({ visible, selectedCity, onClose, onSelect }: Ci
               })}
             </View>
           </ScrollView>
-        </View>
+        </KeyboardAvoidingView>
       </Pressable>
     </Modal>
   );
@@ -86,8 +94,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     gap: 12,
-    padding: 20,
-    paddingBottom: 30
+    padding: 20
   },
   handle: {
     alignSelf: "center",

@@ -31,7 +31,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22
   },
   text: {
+    flexShrink: 1,
     fontSize: 15,
-    fontWeight: "900"
+    fontWeight: "900",
+    textAlign: "center"
   }
 });
