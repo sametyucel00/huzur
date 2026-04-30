@@ -80,8 +80,7 @@ export type FeatureKey =
   | "premium_plans"
   | "advanced_mood_recommendations"
   | "audio_content"
-  | "themes_premium"
-  | "ads_free";
+  | "themes_premium";
 
 export interface FeatureGate {
   key: FeatureKey;

@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Linking, Text, View, StyleSheet } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { AppScreen } from "@/components/AppScreen";
 import { BadgePill } from "@/components/BadgePill";
@@ -14,9 +14,11 @@ const benefits = [
   "Haftalık içgörü ve daha net ilerleme takibi",
   "Gelişmiş günlük plan ve özel huzur programları",
   "Aylık mini takvim ve sessiz ödül serileri",
-  "Reklamsız, daha sakin bir kullanım deneyimi",
+  "Daha sade ve kesintisiz bir kullanım deneyimi",
   "Sesli içerik altyapısına hazırlık"
 ];
+
+const appleStandardEulaUrl = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 
 export function PaywallScreen() {
   const router = useRouter();
@@ -89,6 +91,23 @@ export function PaywallScreen() {
         buttonLabel={isLoading ? "Hazırlanıyor" : "Aylık planı seç"}
         onPress={() => purchase("monthly")}
       />
+
+      <ContentCard>
+        <Text style={[styles.infoTitle, { color: theme.colors.text }]}>Abonelik bilgileri</Text>
+        <Text style={[theme.typography.caption, { color: theme.colors.textMuted }]}>
+          Sükût Ayrıcalık aylık ve yıllık otomatik yenilenen abonelik olarak sunulur. Satın alma, yenileme ve iptal işlemleri
+          Apple ID hesabın üzerinden yönetilir. Temel ibadet araçları ücretsiz kalır.
+        </Text>
+        <View style={styles.legalRow}>
+          <SecondaryButton label="Gizlilik politikası" onPress={() => router.push("/privacy")} style={styles.legalButton} />
+          <SecondaryButton
+            label="Kullanım Koşulları"
+            onPress={() => Linking.openURL(appleStandardEulaUrl)}
+            accessibilityLabel="Kullanım Koşulları EULA bağlantısını aç"
+            style={styles.legalButton}
+          />
+        </View>
+      </ContentCard>
 
       <ContentCard>
         <Text style={[styles.infoTitle, { color: theme.colors.text }]}>Sosyal fayda notu</Text>
@@ -176,5 +195,13 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 17,
     fontWeight: "900"
+  },
+  legalRow: {
+    flexDirection: "row",
+    gap: 10
+  },
+  legalButton: {
+    flex: 1,
+    paddingHorizontal: 10
   }
 });

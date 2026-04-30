@@ -1,14 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Location from "expo-location";
 import { useRouter } from "expo-router";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { AppScreen } from "@/components/AppScreen";
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { SecondaryButton } from "@/components/SecondaryButton";
-import { requestLocalNotificationPermission } from "@/services/notifications/localNotifications";
 import { STORAGE_KEYS } from "@/storage/keys";
 import { useAppTheme } from "@/theme/useAppTheme";
-import { showInfo } from "@/utils/dialog";
 
 const steps = [
   "Günlük dua, zikir ve Kur'an okuma ritmini sade bir alanda topla.",
@@ -23,26 +19,6 @@ export function OnboardingScreen() {
   const finish = async () => {
     await AsyncStorage.setItem(STORAGE_KEYS.onboardingSeen, "true").catch(() => undefined);
     router.replace("/");
-  };
-
-  const requestLocation = async () => {
-    if (Platform.OS === "web") {
-      showInfo("Konum izni", "Konum izni Android ve iOS uygulamasında istenir. Web önizlemede şehir seçimiyle devam edebilirsin.");
-      return;
-    }
-
-    const result = await Location.requestForegroundPermissionsAsync().catch(() => null);
-    showInfo("Konum izni", result?.granted ? "Konum izni verildi." : "Konum izni verilmedi; manuel şehir seçimiyle devam edebilirsin.");
-  };
-
-  const requestNotifications = async () => {
-    if (Platform.OS === "web") {
-      showInfo("Bildirim izni", "Bildirim izni Android ve iOS uygulamasında istenir.");
-      return;
-    }
-
-    const result = await requestLocalNotificationPermission().catch(() => ({ granted: false }));
-    showInfo("Bildirim izni", result.granted ? "Bildirim izni verildi." : "Bildirim izni verilmedi; ayarlardan tekrar deneyebilirsin.");
   };
 
   return (
@@ -60,11 +36,6 @@ export function OnboardingScreen() {
             <Text style={[theme.typography.body, styles.stepText, { color: theme.colors.text }]}>{item}</Text>
           </View>
         ))}
-      </View>
-
-      <View style={styles.permissionRow}>
-        <SecondaryButton label="Konum izni" onPress={requestLocation} style={styles.permissionButton} />
-        <SecondaryButton label="Bildirim izni" onPress={requestNotifications} style={styles.permissionButton} />
       </View>
 
       <PrimaryButton label="Başla" onPress={finish} />
@@ -123,14 +94,4 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0
   },
-  permissionRow: {
-    alignSelf: "stretch",
-    flexDirection: "row",
-    gap: 10,
-    justifyContent: "center",
-    width: "100%"
-  },
-  permissionButton: {
-    flex: 1
-  }
 });
